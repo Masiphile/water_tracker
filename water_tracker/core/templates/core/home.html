@@ -1,0 +1,192 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Tracker</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body {
+            background-color: #e0f2fe; /* Light Blue */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #334155;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #cbd5e1;
+            margin-bottom: 20px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #0369a1;
+            margin: 0;
+        }
+
+        .icon-img {
+            height: 30px;
+            width: auto;
+            cursor: pointer;
+        }
+
+        .greeting {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        /* Action Buttons Container */
+        .action-group {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn-main {
+            flex: 1;
+            min-width: 200px;
+            max-width: 300px;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: transform 0.2s, background 0.3s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Blue Button Style */
+        .btn-report {
+            background-color: #2563eb;
+        }
+
+        .btn-report:hover {
+            background-color: #1d4ed8;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* White/Professional Button Style for My Reports */
+        .btn-secondary {
+            background-color: #ffffff;
+            color: #2563eb;
+            border: 2px solid #2563eb;
+        }
+
+        .btn-secondary:hover {
+            background-color: #f8fafc;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .btn-main:active {
+            transform: translateY(0);
+        }
+
+        /* Map Styling */
+        #map {
+            height: 350px;
+            width: 100%;
+            border-radius: 12px;
+            border: 2px solid #94a3b8;
+            margin-bottom: 30px;
+        }
+
+        .activity-section {
+            background: rgba(255, 255, 255, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tick-icon {
+            height: 20px;
+            width: 20px;
+        }
+
+        h4 {
+            margin-top: 0;
+            color: #475569;
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-container">
+        <span class="logo-text">Water Tracker</span>
+       <img src="{% static 'images/water.jpg' %}" alt="Water Icon" class="icon-img">
+    </div>
+    <img src="{% static 'images/Bell.jpg' %}" alt="Notifications" class="icon-img">
+</header>
+
+<div class="greeting">Hello, Member!</div>
+
+<div class="action-group">
+    <a href="/reports/report/" class="btn-main btn-report">
+        ! REPORT LEAK
+    </a>
+    <a href="/reports/my-reports/" class="btn-main btn-secondary">
+        MY REPORTS
+    </a>
+</div>
+
+<div id="map"></div>
+
+<section class="activity-section">
+    <h4>Recent Activity:</h4>
+    <div class="activity-item">
+        <span>Main St. Leak: <strong>Fixed</strong></span>
+        <img src="{% static 'images/tick.png' %}" alt="Fixed" class="tick-icon">
+    </div>
+</section>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    // Initialize the map centered on Kimberley
+    var map = L.map('map').setView([-28.7282, 24.7499], 13);
+
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Add a sample marker for the fixed leak
+    L.marker([-28.7282, 24.7499]).addTo(map)
+        .bindPopup('Main St. Leak: Fixed ✅')
+        .openPopup();
+</script>
+
+</body>
+</html>

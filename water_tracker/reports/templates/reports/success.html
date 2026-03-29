@@ -1,0 +1,150 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Submitted - Water Tracker</title>
+    <style>
+        body {
+            background-color: #e0f2fe; /* Light Blue */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #334155;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .success-card {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Updated styling for your tick.png */
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            object-fit: contain;
+        }
+
+        h2 {
+            margin: 10px 0;
+            color: #0369a1;
+        }
+
+        .submission-text {
+            color: #64748b;
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+        }
+
+        .info-box {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: left;
+            margin-bottom: 25px;
+        }
+
+        .info-item {
+            margin: 8px 0;
+            font-size: 0.95rem;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #475569;
+        }
+
+        .status-pill {
+            background-color: #fef3c7;
+            color: #92400e;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .next-steps {
+            text-align: left;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        .next-steps h4 {
+            margin: 0 0 10px 0;
+            color: #1e293b;
+        }
+
+        .next-steps ol {
+            padding-left: 20px;
+            margin: 0;
+            color: #475569;
+            font-size: 0.9rem;
+        }
+
+        .next-steps li {
+            margin-bottom: 8px;
+        }
+
+        .btn-home {
+            display: inline-block;
+            background-color: #2563eb;
+            color: white;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .btn-home:hover {
+            background-color: #1d4ed8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="success-card">
+    <img src="{% static 'images/tick.png' %}" alt="Success" class="success-icon">
+    
+    <h2>Report Submitted</h2>
+    <p class="submission-text">Submission Received!</p>
+
+    <div class="info-box">
+        <div class="info-item">
+            <span class="label">Reference No:</span> #WLT-99281
+        </div>
+        <div class="info-item">
+            <span class="label">Status:</span> 
+            <span class="status-pill">Pending Review 🟡</span>
+        </div>
+    </div>
+
+    <div class="next-steps">
+        <h4>What's Next?</h4>
+        <ol>
+            <li>Dispatching a technician to the location.</li>
+            <li>ETA: Within 4-6 hours.</li>
+        </ol>
+    </div>
+
+    <a href="/" class="btn-home">Return Home</a>
+</div>
+
+</body>
+</html>
