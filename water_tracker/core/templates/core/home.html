@@ -1,191 +1,215 @@
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Water Tracker</title>
+    <title>Water Tracker | Official Portal</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
     <style>
+        :root {
+            --primary-blue: #2563eb;
+            --bg-light-blue: #f0f9ff; 
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
         body {
-            background-color: #e0f2fe; /* Light Blue */
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #334155;
+            background-color: var(--bg-light-blue);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
             margin: 0;
-            padding: 20px;
-            line-height: 1.6;
+            padding: 0;
+            line-height: 1.4;
         }
 
         header {
+            background: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #cbd5e1;
-            margin-bottom: 20px;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            padding: 0.75rem 10%;
+            border-bottom: 1px solid #e0f2fe;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         .logo-text {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #0369a1;
-            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            letter-spacing: -0.025em;
+        }
+
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
         .icon-img {
-            height: 30px;
-            width: auto;
+            height: 20px;
+            opacity: 0.7;
             cursor: pointer;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto; /* Reduced from 40px */
+            padding: 0 20px;
         }
 
         .greeting {
-            font-size: 1.1rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        /* Compact Hero Section */
+        .hero-section {
+            background: white;
+            padding: 24px 20px; /* Reduced from 48px */
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
             margin-bottom: 20px;
         }
 
-        /* Action Buttons Container */
-        .action-group {
-            display: flex;
-            gap: 15px;
-            margin: 20px 0;
-            flex-wrap: wrap;
+        .hero-section h1 {
+            font-size: 1.75rem; /* Smaller Font */
+            margin: 0 0 8px;
+            font-weight: 700;
         }
 
-        .btn-main {
-            flex: 1;
-            min-width: 200px;
-            max-width: 300px;
-            color: white;
-            border: none;
-            padding: 15px;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            text-decoration: none;
-            text-align: center;
-            transition: transform 0.2s, background 0.3s, box-shadow 0.2s;
+        .hero-section p {
+            color: var(--text-muted);
+            max-width: 550px;
+            margin: 0 auto 20px;
+            font-size: 0.95rem;
+        }
+
+        .action-group {
             display: flex;
-            align-items: center;
+            gap: 12px;
             justify-content: center;
         }
 
-        /* Blue Button Style */
-        .btn-report {
-            background-color: #2563eb;
-        }
-
-        .btn-report:hover {
-            background-color: #1d4ed8;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-            transform: translateY(-2px);
-        }
-
-        /* White/Professional Button Style for My Reports */
-        .btn-secondary {
-            background-color: #ffffff;
-            color: #2563eb;
-            border: 2px solid #2563eb;
-        }
-
-        .btn-secondary:hover {
-            background-color: #f8fafc;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            transform: translateY(-2px);
-        }
-
-        .btn-main:active {
-            transform: translateY(0);
-        }
-
-        /* Map Styling */
-        #map {
-            height: 350px;
-            width: 100%;
-            border-radius: 12px;
-            border: 2px solid #94a3b8;
-            margin-bottom: 30px;
-        }
-
-        .activity-section {
-            background: rgba(255, 255, 255, 0.5);
-            padding: 15px;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .activity-item {
+        .btn-main {
+            padding: 10px 24px;
+            font-weight: 600;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.85rem;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 6px;
         }
 
-        .tick-icon {
-            height: 20px;
-            width: 20px;
+        .btn-report {
+            background-color: var(--primary-blue);
+            color: white;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
         }
 
-        h4 {
-            margin-top: 0;
-            color: #475569;
-            border-bottom: 1px solid #cbd5e1;
-            padding-bottom: 5px;
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary-blue);
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Compact Map Card */
+        .map-card {
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .section-title {
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 0.05em;
+            margin-bottom: 10px;
+        }
+
+        #map {
+            height: 280px; /* Reduced from 400px to prevent scrolling */
+            width: 100%;
+            border-radius: 8px;
+            z-index: 1;
+        }
+
+        .activity-card {
+            margin-top: 15px;
+            background: #f8fafc;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border-left: 4px solid #10b981;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .status-badge {
+            background: #ecfdf5;
+            color: #065f46;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
         }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo-container">
-        <span class="logo-text">Water Tracker</span>
-       <img src="{% static 'images/water.jpg' %}" alt="Water Icon" class="icon-img">
+    <div class="logo-text">WATER TRACKER</div>
+    <div class="nav-icons">
+        <img src="{% static 'images/Bell.jpg' %}" class="icon-img" alt="Notifications">
+        <div style="width: 30px; height: 30px; background: #dbeafe; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; color: var(--primary-blue);">M</div>
     </div>
-    <img src="{% static 'images/Bell.jpg' %}" alt="Notifications" class="icon-img">
 </header>
 
-<div class="greeting">Hello, Member!</div>
+<div class="container">
+    <div class="greeting">Hello, Member! </div>
 
-<div class="action-group">
-    <a href="/reports/report/" class="btn-main btn-report">
-        ! REPORT LEAK
-    </a>
-    <a href="/reports/my-reports/" class="btn-main btn-secondary">
-        MY REPORTS
-    </a>
-</div>
+    <section class="hero-section">
+        <h1>Report & Track Water Issues</h1>
+        <p>Report water leaks and track service delivery in real-time to improve local water management.</p>
+        
+        <div class="action-group">
+            <a href="/reports/report/" class="btn-main btn-report">! REPORT LEAK</a>
+            <a href="/reports/my-reports/" class="btn-main btn-secondary"> MY REPORTS</a>
+        </div>
+    </section>
 
-<div id="map"></div>
+    <div class="map-card">
+        <div class="section-title">Live Map of Reported Issues</div>
+        <div id="map"></div>
 
-<section class="activity-section">
-    <h4>Recent Activity:</h4>
-    <div class="activity-item">
-        <span>Main St. Leak: <strong>Fixed</strong></span>
-        <img src="{% static 'images/tick.png' %}" alt="Fixed" class="tick-icon">
+        <div class="activity-card">
+            <div>
+                <span style="display: block; font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Latest Update</span>
+                <span style="font-weight: 600; font-size: 0.95rem;">Main St. Leak</span>
+            </div>
+            <div class="status-badge">FIXED ✓</div>
+        </div>
     </div>
-</section>
+</div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    // Initialize the map centered on Kimberley
-    var map = L.map('map').setView([-28.7282, 24.7499], 13);
-
-    // Add OpenStreetMap tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-
-    // Add a sample marker for the fixed leak
-    L.marker([-28.7282, 24.7499]).addTo(map)
-        .bindPopup('Main St. Leak: Fixed ✅')
-        .openPopup();
+    var map = L.map('map', { zoomControl: false }).setView([-28.7282, 24.7499], 13);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '© OpenStreetMap' }).addTo(map);
+    L.control.zoom({ position: 'bottomright' }).addTo(map);
+    L.marker([-28.7282, 24.7499]).addTo(map).bindPopup('<b>Main St. Leak</b><br>Fixed ✅').openPopup();
 </script>
 
 </body>

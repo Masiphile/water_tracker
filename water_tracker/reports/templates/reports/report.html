@@ -6,110 +6,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Report Leak - Water Tracker</title>
     <style>
-        body {
-            background-color: #e0f2fe; /* Light Blue */
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #334155;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
+        body { background-color: #f0f9ff; font-family: 'Inter', 'Segoe UI', sans-serif; color: #334155; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .container { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); max-width: 500px; width: 100%; }
+        .back-link { text-decoration: none; color: #2563eb; font-size: 0.9rem; display: inline-block; margin-bottom: 20px; font-weight: 500; }
+        h2 { margin-top: 0; color: #1e40af; border-bottom: 2px solid #f0f9ff; padding-bottom: 12px; font-size: 1.5rem; }
+        
+        .section { margin-bottom: 24px; }
+        
+        /* Icon and Title Styling */
+        .section-title { 
+            font-weight: 700; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            margin-bottom: 12px; 
+            color: #475569; 
+            font-size: 1.1rem;
+        }
+        
+        .section-icon { 
+            height: 32px; 
+            width: 32px;  
+            object-fit: contain; 
         }
 
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
-            width: 100%;
+        .emoji-icon {
+            font-size: 1.5rem;
+            line-height: 1;
         }
 
-        .back-link {
-            text-decoration: none;
-            color: #2563eb;
-            font-size: 0.9rem;
-            display: inline-block;
-            margin-bottom: 15px;
-        }
-
-        h2 {
-            margin-top: 0;
-            color: #0369a1;
-            border-bottom: 2px solid #e0f2fe;
-            padding-bottom: 10px;
-        }
-
-        .section {
-            margin-bottom: 20px;
-        }
-
-        .section-title {
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-            color: #475569;
-        }
-
-        /* Styling for your custom icons */
-        .section-icon {
-            height: 24px;
-            width: 24px;
-            object-fit: contain;
-        }
-
-        input[type="text"], 
-        input[type="tel"], 
-        select, 
-        textarea {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 14px;
-        }
-
-        .location-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-location {
-            white-space: nowrap;
-            background-color: #f1f5f9;
-            border: 1px solid #cbd5e1;
-            padding: 0 15px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 13px;
-        }
-
-        .btn-submit {
-            width: 100%;
-            background-color: #2563eb;
-            color: white;
-            border: none;
-            padding: 14px;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: background 0.2s;
-        }
-
-        .btn-submit:hover {
-            background-color: #1d4ed8;
-        }
-
-        .file-input-wrapper {
-            margin-top: 5px;
-            font-size: 13px;
-        }
+        input[type="text"], input[type="tel"], select, textarea { width: 100%; padding: 12px; margin-top: 8px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-size: 15px; transition: border-color 0.2s; }
+        input:focus { outline: none; border-color: #2563eb; }
+        
+        .location-group { display: flex; gap: 10px; align-items: flex-end; }
+        .btn-location { white-space: nowrap; background-color: #f8fafc; border: 1px solid #cbd5e1; height: 45px; padding: 0 15px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; transition: 0.2s; margin-top: 8px; }
+        .btn-location:hover { background-color: #f1f5f9; border-color: #94a3b8; }
+        
+        .btn-submit { width: 100%; background-color: #2563eb; color: white; border: none; padding: 16px; font-size: 1.1rem; font-weight: bold; border-radius: 10px; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2); transition: all 0.2s; }
+        .btn-submit:hover { background-color: #1d4ed8; transform: translateY(-1px); }
+        
+        .file-input-wrapper { margin-top: 8px; padding: 10px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; }
     </style>
 </head>
 <body>
@@ -123,36 +59,42 @@
         
         <div class="section">
             <div class="section-title">
-                <img src="{% static 'images/location.png' %}" class="section-icon" alt="Location Icon">
+                <img src="{% static 'images/location.png' %}" class="section-icon" alt="Location">
                 Location
             </div>
             <div class="location-group">
-                <input type="text" name="location" placeholder="Current GPS Address" required>
-                <button type="button" class="btn-location">📍 Use My Location</button>
+                <input type="text" id="location-input" name="location" placeholder="Current GPS Address" required>
+                <button type="button" class="btn-location" onclick="getLocation()">📍 Use My Location</button>
             </div>
         </div>
 
         <div class="section">
             <div class="section-title">
-                <img src="{% static 'images/details.png' %}" class="section-icon" alt="Details Icon">
+                <img src="{% static 'images/details.png' %}" class="section-icon" alt="Details">
                 Details
             </div>
             
             <input type="text" name="full_name" placeholder="Full Name" required>
-            <input type="tel" name="phone" placeholder="Cellphone Number" required style="margin-top: 10px;">
             
-            <select name="leak_type" style="margin-top: 10px;">
+            <input type="tel" name="phone" placeholder="Cellphone Number (10 digits)" required 
+                   pattern="[0-9]{10}" maxlength="10" 
+                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+            
+            <select name="leak_type" required>
                 <option value="">-- Select Leak Type --</option>
                 <option value="trickle">Trickle (Low Flow)</option>
                 <option value="steady">Steady Stream</option>
                 <option value="burst">Burst Pipe (High Flow)</option>
             </select>
 
-            <textarea name="details" rows="3" placeholder="Add more details..." style="margin-top: 10px;"></textarea>
+            <textarea name="details" rows="3" placeholder="Add more details... (Optional)"></textarea>
         </div>
 
         <div class="section">
-            <div class="section-title">📸 Evidence</div>
+            <div class="section-title">
+                <span class="emoji-icon">📸</span>
+                Evidence
+                </div>
             <div class="file-input-wrapper">
                 <input type="file" name="evidence" id="file-upload">
             </div>
@@ -161,6 +103,28 @@
         <button type="submit" class="btn-submit">SUBMIT REPORT</button>
     </form>
 </div>
+
+<script>
+    function getLocation() {
+        const locationInput = document.getElementById('location-input');
+        if (navigator.geolocation) {
+            locationInput.placeholder = "Fetching location...";
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    locationInput.value = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+                },
+                (error) => {
+                    alert("Unable to retrieve your location. Please type it manually.");
+                    locationInput.placeholder = "Current GPS Address";
+                }
+            );
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
+</script>
 
 </body>
 </html>
