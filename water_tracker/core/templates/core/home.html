@@ -4,17 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Water Tracker | Official Portal</title>
+    <title>Water Tracker | Durban Official Portal</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --primary-blue: #2563eb;
+            --primary-blue: #1d4ed8;
+            --accent-blue: #2563eb;
             --bg-light-blue: #f0f9ff; 
-            --text-main: #1e293b;
+            --text-main: #0f172a;
             --text-muted: #64748b;
-            --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
         }
 
         body {
@@ -23,193 +24,216 @@
             color: var(--text-main);
             margin: 0;
             padding: 0;
-            line-height: 1.4;
+            overflow-x: hidden; /* Prevents side scrolling */
         }
 
+        /* Centered Header */
         header {
             background: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem 10%;
-            border-bottom: 1px solid #e0f2fe;
+            padding: 1rem 0;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: center;
             position: sticky;
             top: 0;
             z-index: 1000;
         }
 
         .logo-text {
-            font-size: 1.1rem;
-            font-weight: 700;
+            font-size: 1.5rem;
+            font-weight: 800;
             color: var(--primary-blue);
-            letter-spacing: -0.025em;
-        }
-
-        .nav-icons {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .icon-img {
-            height: 20px;
-            opacity: 0.7;
-            cursor: pointer;
+            letter-spacing: -0.02em;
         }
 
         .container {
-            max-width: 900px;
-            margin: 20px auto; /* Reduced from 40px */
-            padding: 0 20px;
+            max-width: 850px;
+            margin: 10px auto; /* Tightened margin for screenshot */
+            padding: 0 15px;
         }
 
-        .greeting {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: var(--text-muted);
+        .greeting { 
+            font-weight: 600; 
+            font-size: 0.9rem; 
+            color: var(--text-muted); 
+            margin-bottom: 8px; 
+            text-align: left;
+        }
+
+        /* Compact Hero Card */
+        .hero-section {
+            background: white;
+            padding: 15px 25px; /* Reduced padding */
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 15px;
+            border: 1px solid rgba(255,255,255,0.7);
+        }
+
+        .emergency-banner {
+            color: #b91c1c;
+            font-weight: 700;
+            font-size: 0.85rem;
             margin-bottom: 8px;
         }
 
-        /* Compact Hero Section */
-        .hero-section {
-            background: white;
-            padding: 24px 20px; /* Reduced from 48px */
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: var(--card-shadow);
-            margin-bottom: 20px;
-        }
-
         .hero-section h1 {
-            font-size: 1.75rem; /* Smaller Font */
-            margin: 0 0 8px;
-            font-weight: 700;
+            font-size: 1.6rem;
+            margin: 0 0 5px;
+            font-weight: 800;
         }
 
         .hero-section p {
             color: var(--text-muted);
-            max-width: 550px;
-            margin: 0 auto 20px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
+            margin: 0 auto 15px;
+            max-width: 600px;
         }
 
-        .action-group {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-        }
+        .action-group { display: flex; gap: 10px; justify-content: center; }
 
         .btn-main {
             padding: 10px 24px;
-            font-weight: 600;
-            border-radius: 6px;
+            font-weight: 700;
+            border-radius: 8px;
             text-decoration: none;
             font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            transition: 0.2s;
         }
 
-        .btn-report {
-            background-color: var(--primary-blue);
-            color: white;
-            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
-        }
+        .btn-report { background: var(--accent-blue); color: white; }
+        .btn-secondary { background: white; color: var(--accent-blue); border: 1px solid #e2e8f0; }
 
-        .btn-secondary {
-            background-color: white;
-            color: var(--primary-blue);
-            border: 1px solid #e2e8f0;
-        }
-
-        /* Compact Map Card */
+        /* Map Section */
         .map-card {
             background: white;
-            padding: 16px;
-            border-radius: 12px;
+            padding: 15px;
+            border-radius: 16px;
             box-shadow: var(--card-shadow);
         }
 
-        .section-title {
-            font-weight: 700;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            font-size: 0.7rem;
-            letter-spacing: 0.05em;
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 10px;
         }
 
+        .map-title { font-weight: 700; font-size: 0.8rem; color: #1e293b; text-transform: uppercase; }
+
+        .neighborhood-select {
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            font-size: 0.8rem;
+        }
+
         #map {
-            height: 280px; /* Reduced from 400px to prevent scrolling */
+            height: 280px; /* Reduced height to fit on screen */
             width: 100%;
-            border-radius: 8px;
+            border-radius: 12px;
             z-index: 1;
         }
 
-        .activity-card {
+        /* Updates Grid */
+        .updates-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
             margin-top: 15px;
-            background: #f8fafc;
-            padding: 12px 16px;
-            border-radius: 8px;
-            border-left: 4px solid #10b981;
+        }
+
+        .activity-card {
+            background: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #f1f5f9;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
-        .status-badge {
-            background: #ecfdf5;
-            color: #065f46;
-            padding: 4px 10px;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 700;
-        }
+        .update-label { font-size: 0.6rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
+        .update-name { font-weight: 700; font-size: 0.8rem; }
+
+        .status-fixed { background: #ecfdf5; color: #065f46; padding: 3px 7px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; }
+        .status-dispatched { background: #fff7ed; color: #9a3412; padding: 3px 7px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; }
     </style>
 </head>
 <body>
 
 <header>
     <div class="logo-text">WATER TRACKER</div>
-    <div class="nav-icons">
-        <img src="{% static 'images/Bell.jpg' %}" class="icon-img" alt="Notifications">
-        <div style="width: 30px; height: 30px; background: #dbeafe; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; color: var(--primary-blue);">M</div>
-    </div>
 </header>
 
 <div class="container">
-    <div class="greeting">Hello, Member! </div>
+    <div class="greeting">Hello, Member!</div>
 
     <section class="hero-section">
+        <div class="emergency-banner">
+            📞 Durban Municipal Emergency: 031-311-1111
+        </div>
         <h1>Report & Track Water Issues</h1>
-        <p>Report water leaks and track service delivery in real-time to improve local water management.</p>
+        <p>Join the Durban community in pinpointing leaks to help eThekwini Water optimize local management.</p>
         
         <div class="action-group">
             <a href="/reports/report/" class="btn-main btn-report">! REPORT LEAK</a>
-            <a href="/reports/my-reports/" class="btn-main btn-secondary"> MY REPORTS</a>
+            <a href="/reports/my-reports/" class="btn-main btn-secondary">MY REPORTS</a>
         </div>
     </section>
 
     <div class="map-card">
-        <div class="section-title">Live Map of Reported Issues</div>
+        <div class="map-header">
+            <div class="map-title">LIVE LEAK MAP: DURBAN</div>
+            <select class="neighborhood-select" id="areaSelect">
+                <option>Durban: All Areas</option>
+                <option>Umhlanga</option>
+                <option>Berea</option>
+                <option>Glenwood</option>
+            </select>
+        </div>
+        
         <div id="map"></div>
 
-        <div class="activity-card">
-            <div>
-                <span style="display: block; font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Latest Update</span>
-                <span style="font-weight: 600; font-size: 0.95rem;">Main St. Leak</span>
+        <div class="updates-grid">
+            <div class="activity-card" style="border-left: 4px solid #10b981;">
+                <div>
+                    <span class="update-label">Latest Fixed</span>
+                    <span class="update-name">Umhlanga, 5 Florida Rd</span>
+                </div>
+                <div class="status-fixed">FIXED ✓</div>
             </div>
-            <div class="status-badge">FIXED ✓</div>
+            <div class="activity-card" style="border-left: 4px solid #f97316;">
+                <div>
+                    <span class="update-label">Active Issue</span>
+                    <span class="update-name">Berea, 20 Musgrave Rd</span>
+                </div>
+                <div class="status-dispatched">DISPATCHED</div>
+            </div>
         </div>
     </div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    var map = L.map('map', { zoomControl: false }).setView([-28.7282, 24.7499], 13);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '© OpenStreetMap' }).addTo(map);
+    // Durban Coordinates: -29.8587, 31.0218
+    var map = L.map('map', { zoomControl: false }).setView([-29.8587, 31.0218], 12);
+    
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+
     L.control.zoom({ position: 'bottomright' }).addTo(map);
-    L.marker([-28.7282, 24.7499]).addTo(map).bindPopup('<b>Main St. Leak</b><br>Fixed ✅').openPopup();
+
+    var leaks = [
+        { loc: [-29.8433, 31.0289], name: "Florida Rd Burst Pipe" },
+        { loc: [-29.8510, 31.0050], name: "Musgrave Rd Trickle" },
+        { loc: [-29.7250, 31.0660], name: "Umhlanga Leak" }
+    ];
+
+    leaks.forEach(function(leak) {
+        L.marker(leak.loc).addTo(map).bindPopup(`<b>${leak.name}</b>`);
+    });
 </script>
 
 </body>

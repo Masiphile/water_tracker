@@ -9,7 +9,8 @@
         body { background-color: #f0f9ff; font-family: 'Inter', 'Segoe UI', sans-serif; color: #334155; margin: 0; padding: 20px; display: flex; justify-content: center; }
         .container { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); max-width: 500px; width: 100%; }
         .back-link { text-decoration: none; color: #2563eb; font-size: 0.9rem; display: inline-block; margin-bottom: 20px; font-weight: 500; }
-        h2 { margin-top: 0; color: #1e40af; border-bottom: 2px solid #f0f9ff; padding-bottom: 12px; font-size: 1.5rem; }
+        h2 { margin-top: 0; color: #1e40af; border-bottom: 2px solid #f0f9ff; padding-bottom: 12px; font-size: 1.5rem; margin-bottom: 5px;}
+        .subtitle { color: #64748b; font-size: 0.9rem; margin-bottom: 25px; margin-top: 0; }
         
         .section { margin-bottom: 24px; }
         
@@ -30,10 +31,7 @@
             object-fit: contain; 
         }
 
-        .emoji-icon {
-            font-size: 1.5rem;
-            line-height: 1;
-        }
+        .section-header { font-weight: 700; margin-bottom: 10px; color: #1e293b; font-size: 1.1rem; }
 
         input[type="text"], input[type="tel"], select, textarea { width: 100%; padding: 12px; margin-top: 8px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-size: 15px; transition: border-color 0.2s; }
         input:focus { outline: none; border-color: #2563eb; }
@@ -42,10 +40,44 @@
         .btn-location { white-space: nowrap; background-color: #f8fafc; border: 1px solid #cbd5e1; height: 45px; padding: 0 15px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; transition: 0.2s; margin-top: 8px; }
         .btn-location:hover { background-color: #f1f5f9; border-color: #94a3b8; }
         
-        .btn-submit { width: 100%; background-color: #2563eb; color: white; border: none; padding: 16px; font-size: 1.1rem; font-weight: bold; border-radius: 10px; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2); transition: all 0.2s; }
-        .btn-submit:hover { background-color: #1d4ed8; transform: translateY(-1px); }
+        /* 🔥 Fixed Severity Pill Styling */
+        .severity-group { display: flex; gap: 10px; margin-top: 5px; }
+        .severity-option {
+            flex: 1; padding: 10px; border-radius: 10px;
+            text-align: center; cursor: pointer;
+            border: 1px solid #e2e8f0; font-weight: 600;
+            transition: all 0.2s;
+        }
         
-        .file-input-wrapper { margin-top: 8px; padding: 10px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; }
+        input[type="radio"] { display: none; }
+
+        .low { background: #f0fdf4; color: #166534; }
+        .medium { background: #fff7ed; color: #92400e; }
+        .high { background: #fef2f2; color: #991b1b; }
+
+        input[type="radio"]:checked + .severity-option {
+            border: 2px solid #2563eb;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .priority-note { font-size: 0.8rem; color: #64748b; margin-top: 8px; }
+
+        /* 📸 Fixed Attachment Styling */
+        .file-wrapper { display: flex; align-items: center; gap: 15px; margin-top: 10px; min-height: 60px; }
+        .upload-box {
+            border: 1px dashed #cbd5e1; padding: 15px;
+            border-radius: 8px; cursor: pointer; flex: 1;
+            text-align: center; background: #f8fafc; color: #475569;
+        }
+        .preview-thumb { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; display: none; border: 1px solid #cbd5e1; }
+        .upload-another { color: #2563eb; text-decoration: none; font-size: 0.9rem; font-weight: 500; display: none; }
+
+        /* Footer Actions */
+        .footer-actions { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 15px; }
+        .btn-submit { width: 80%; background-color: #2563eb; color: white; border: none; padding: 16px; font-size: 1.1rem; font-weight: bold; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2); transition: all 0.2s; }
+        .btn-submit:hover { background-color: #1d4ed8; transform: translateY(-1px); }
+        .cancel-btn { color: #2563eb; text-decoration: none; font-weight: 600; }
+        
     </style>
 </head>
 <body>
@@ -53,6 +85,7 @@
 <div class="container">
     <a href="/" class="back-link">← Back to Home</a>
     <h2>Report Leak</h2>
+    <p class="subtitle">Your reports help us act quickly.</p>
 
     <form method="POST" action="{% url 'report' %}" enctype="multipart/form-data">
         {% csrf_token %}
@@ -64,7 +97,7 @@
             </div>
             <div class="location-group">
                 <input type="text" id="location-input" name="location" placeholder="Current GPS Address" required>
-                <button type="button" class="btn-location" onclick="getLocation()">📍 Use My Location</button>
+                <button type="button" class="btn-location" onclick="getLocation()"> Use My Location</button>
             </div>
         </div>
 
@@ -82,25 +115,31 @@
             
             <select name="leak_type" required>
                 <option value="">-- Select Leak Type --</option>
-                <option value="trickle">Trickle (Low Flow)</option>
-                <option value="steady">Steady Stream</option>
-                <option value="burst">Burst Pipe (High Flow)</option>
+                <option value="trickle">Trickle (!Low Flow)</option>
+                <option value="steady">Steady Stream(!!Medium Flow)</option>
+                <option value="burst">Burst Pipe (!!!High Flow)</option>
             </select>
 
-            <textarea name="details" rows="3" placeholder="Add more details... (Optional)"></textarea>
+            <textarea id="desc" name="details" rows="3" placeholder="Add more details... (Optional)"></textarea>
+            <div id="count" style="text-align: right; font-size: 12px; color: #64748b;">0/500</div>
         </div>
 
-        <div class="section">
-            <div class="section-title">
-                <span class="emoji-icon">📸</span>
-                Evidence
-                </div>
-            <div class="file-input-wrapper">
-                <input type="file" name="evidence" id="file-upload">
+       <div class="section">
+            <div class="section-header">Attachment</div>
+            <div class="file-wrapper">
+                <label class="upload-box" id="box-label" for="imgInp">
+                    <span id="file-label">Click to Upload Photo</span>
+                    <input type="file" name="evidence" id="imgInp" accept="image/*" hidden>
+                </label>
+                <img id="preview" class="preview-thumb">
+                <a href="#" class="upload-another" id="change-btn" onclick="document.getElementById('imgInp').click()">Upload another photo</a>
             </div>
         </div>
 
-        <button type="submit" class="btn-submit">SUBMIT REPORT</button>
+        <div class="footer-actions">
+            <button type="submit" class="btn-submit">Submit Report</button>
+            <a href="#" class="cancel-btn">Cancel</a>
+        </div>
     </form>
 </div>
 
@@ -124,6 +163,29 @@
             alert("Geolocation is not supported by this browser.");
         }
     }
+
+    // Image Preview Logic
+    const imgInp = document.getElementById('imgInp');
+    const preview = document.getElementById('preview');
+    const boxLabel = document.getElementById('box-label');
+    const changeBtn = document.getElementById('change-btn');
+
+    imgInp.onchange = evt => {
+        const [file] = imgInp.files;
+        if (file) {
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+            boxLabel.style.display = 'none';
+            changeBtn.style.display = 'inline';
+        }
+    }
+
+    // Char Counter Logic
+    const desc = document.getElementById('desc');
+    const count = document.getElementById('count');
+    desc.oninput = () => {
+        count.innerText = `${desc.value.length}/500`;
+    };
 </script>
 
 </body>
