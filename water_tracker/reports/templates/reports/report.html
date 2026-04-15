@@ -4,23 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Report Leak - Water Tracker</title>
+    <title>Report Issue - OmniServe</title>
     <style>
-        body { background-color: #f0f9ff; font-family: 'Inter', 'Segoe UI', sans-serif; color: #334155; margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .container { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); max-width: 500px; width: 100%; }
-        .back-link { text-decoration: none; color: #2563eb; font-size: 0.9rem; display: inline-block; margin-bottom: 20px; font-weight: 500; }
-        h2 { margin-top: 0; color: #1e40af; border-bottom: 2px solid #f0f9ff; padding-bottom: 12px; font-size: 1.5rem; margin-bottom: 5px;}
-        .subtitle { color: #64748b; font-size: 0.9rem; margin-bottom: 25px; margin-top: 0; }
+        body { background-color: #f0f9ff; font-family: 'Inter', 'Segoe UI', sans-serif; color: #334155; margin: 0; padding: 10px; display: flex; justify-content: center; }
+        .container { background: white; padding: 20px; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); max-width: 500px; width: 100%; }
+        .back-link { text-decoration: none; color: #2563eb; font-size: 0.9rem; display: inline-block; margin-bottom: 10px; font-weight: 500; }
+        h2 { margin-top: 0; color: #1e40af; border-bottom: 2px solid #f0f9ff; padding-bottom: 12px; font-size: 1.3rem; margin-bottom: 5px;}
+        .subtitle { color: #64748b; font-size: 0.9rem; margin-bottom: 15px; margin-top: 0; }
         
-        .section { margin-bottom: 24px; }
+        .section { margin-bottom: 16px; }
         
-        /* Icon and Title Styling */
         .section-title { 
             font-weight: 700; 
             display: flex; 
             align-items: center; 
             gap: 12px; 
-            margin-bottom: 12px; 
+            margin-bottom: 8px; 
             color: #475569; 
             font-size: 1.1rem;
         }
@@ -31,60 +30,78 @@
             object-fit: contain; 
         }
 
-        .section-header { font-weight: 700; margin-bottom: 10px; color: #1e293b; font-size: 1.1rem; }
+        .btn-icon {
+            height: 18px;
+            width: 18px;
+            object-fit: contain;
+        }
 
-        input[type="text"], input[type="tel"], select, textarea { width: 100%; padding: 12px; margin-top: 8px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-size: 15px; transition: border-color 0.2s; }
+        input[type="text"], input[type="tel"], select, textarea { width: 100%; padding: 10px; margin-top: 8px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-size: 15px; transition: border-color 0.2s; }
         input:focus { outline: none; border-color: #2563eb; }
         
         .location-group { display: flex; gap: 10px; align-items: flex-end; }
-        .btn-location { white-space: nowrap; background-color: #f8fafc; border: 1px solid #cbd5e1; height: 45px; padding: 0 15px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; transition: 0.2s; margin-top: 8px; }
-        .btn-location:hover { background-color: #f1f5f9; border-color: #94a3b8; }
         
-        /* 🔥 Fixed Severity Pill Styling */
-        .severity-group { display: flex; gap: 10px; margin-top: 5px; }
-        .severity-option {
-            flex: 1; padding: 10px; border-radius: 10px;
-            text-align: center; cursor: pointer;
-            border: 1px solid #e2e8f0; font-weight: 600;
-            transition: all 0.2s;
+        .btn-location { 
+            white-space: nowrap; 
+            background-color: #eff6ff; 
+            color: #1e40af;
+            border: 1px solid #bfdbfe; 
+            height: 40px; 
+            padding: 0 12px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 13px; 
+            font-weight: 700; 
+            transition: all 0.2s; 
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
-        input[type="radio"] { display: none; }
-
-        .low { background: #f0fdf4; color: #166534; }
-        .medium { background: #fff7ed; color: #92400e; }
-        .high { background: #fef2f2; color: #991b1b; }
-
-        input[type="radio"]:checked + .severity-option {
-            border: 2px solid #2563eb;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        .btn-location:hover { 
+            background-color: #dbeafe; 
+            border-color: #2563eb; 
+            transform: translateY(-1px);
         }
 
-        .priority-note { font-size: 0.8rem; color: #64748b; margin-top: 8px; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .loading-spin { animation: spin 1s linear infinite; }
+        
+        .category-hint { font-size: 0.8rem; color: #2563eb; margin-top: 8px; font-weight: 600; display: none; }
 
-        /* 📸 Fixed Attachment Styling */
         .file-wrapper { display: flex; align-items: center; gap: 15px; margin-top: 10px; min-height: 60px; }
+        
+        /* Updated Upload Box for Camera Icon */
         .upload-box {
-            border: 1px dashed #cbd5e1; padding: 15px;
-            border-radius: 8px; cursor: pointer; flex: 1;
-            text-align: center; background: #f8fafc; color: #475569;
+            border: 1px dashed #cbd5e1; 
+            padding: 12px;
+            border-radius: 8px; 
+            cursor: pointer; 
+            flex: 1;
+            text-align: center; 
+            background: #f8fafc; 
+            color: #475569;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
         }
+
         .preview-thumb { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; display: none; border: 1px solid #cbd5e1; }
         .upload-another { color: #2563eb; text-decoration: none; font-size: 0.9rem; font-weight: 500; display: none; }
 
-        /* Footer Actions */
-        .footer-actions { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 15px; }
-        .btn-submit { width: 80%; background-color: #2563eb; color: white; border: none; padding: 16px; font-size: 1.1rem; font-weight: bold; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2); transition: all 0.2s; }
+        .footer-actions { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 10px; }
+        .btn-submit { width: 80%; background-color: #2563eb; color: white; border: none; padding: 14px; font-size: 1.1rem; font-weight: bold; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2); transition: all 0.2s; }
         .btn-submit:hover { background-color: #1d4ed8; transform: translateY(-1px); }
         .cancel-btn { color: #2563eb; text-decoration: none; font-weight: 600; }
-        
     </style>
 </head>
 <body>
 
 <div class="container">
     <a href="/" class="back-link">← Back to Home</a>
-    <h2>Report Leak</h2>
+    <h2>Report Issue</h2>
     <p class="subtitle">Your reports help us act quickly.</p>
 
     <form method="POST" action="{% url 'report' %}" enctype="multipart/form-data">
@@ -92,12 +109,14 @@
         
         <div class="section">
             <div class="section-title">
-                <img src="{% static 'images/location.png' %}" class="section-icon" alt="Location">
                 Location
             </div>
             <div class="location-group">
                 <input type="text" id="location-input" name="location" placeholder="Current GPS Address" required>
-                <button type="button" class="btn-location" onclick="getLocation()"> Use My Location</button>
+                <button type="button" class="btn-location" id="loc-btn" onclick="getLocation()">
+                    <img src="{% static 'images/Location.png' %}" id="loc-img" class="btn-icon" alt="Loc"> 
+                    <span id="loc-text">Use My Location</span>
+                </button>
             </div>
         </div>
 
@@ -108,24 +127,28 @@
             </div>
             
             <input type="text" name="full_name" placeholder="Full Name" required>
+            <input type="tel" name="phone" placeholder="Cellphone Number (10 digits)" required pattern="[0-9]{10}" maxlength="10">
             
-            <input type="tel" name="phone" placeholder="Cellphone Number (10 digits)" required 
-                   pattern="[0-9]{10}" maxlength="10" 
-                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-            
-            <select name="leak_type" required>
-                <option value="">-- Select Leak Type --</option>
-                <option value="trickle">Trickle (!Low Flow)</option>
-                <option value="steady">Steady Stream(!!Medium Flow)</option>
-                <option value="burst">Burst Pipe (!!!High Flow)</option>
+            <label for="issue_category" style="display:block; margin-top:15px; font-weight:700; font-size:0.85rem; color:#475569;">Issue Category</label>
+            <select name="category" id="issue_category" required onchange="updateFormContext()">
+                <option value="" disabled selected>-- Select Issue Type --</option>
+                <option value="water">💧 Water Leak / Burst Pipe</option>
+                <option value="electricity">⚡ Electricity Outage / Fault</option>
+                <option value="roads">🕳️ Potholes / Road Damage</option>
+                <option value="waste">🗑️ Irregular Waste Collection</option>
+                <option value="other">🛠️ Other Service Request</option>
             </select>
+            <div id="hint-text" class="category-hint"></div>
 
-            <textarea id="desc" name="details" rows="3" placeholder="Add more details... (Optional)"></textarea>
+            <textarea id="desc" name="details" rows="2" placeholder="Add more details... (Optional)" style="margin-top:15px;"></textarea>
             <div id="count" style="text-align: right; font-size: 12px; color: #64748b;">0/500</div>
         </div>
 
        <div class="section">
-            <div class="section-header">Attachment</div>
+            <div class="section-title">
+                <img src="{% static 'images/camera.png' %}" class="section-icon" alt="Camera">
+                Attachment
+            </div>
             <div class="file-wrapper">
                 <label class="upload-box" id="box-label" for="imgInp">
                     <span id="file-label">Click to Upload Photo</span>
@@ -138,33 +161,51 @@
 
         <div class="footer-actions">
             <button type="submit" class="btn-submit">Submit Report</button>
-            <a href="#" class="cancel-btn">Cancel</a>
+            <a href="/" class="cancel-btn">Cancel</a>
         </div>
     </form>
 </div>
 
 <script>
+    function updateFormContext() {
+        const category = document.getElementById('issue_category').value;
+        const hint = document.getElementById('hint-text');
+        hint.style.display = "block";
+        switch(category) {
+            case 'water': hint.innerText = "Reporting to: Water & Sanitation Dept"; break;
+            case 'electricity': hint.innerText = "Reporting to: eThekwini Electricity"; break;
+            case 'roads': hint.innerText = "Reporting to: Roads & Stormwater"; break;
+            case 'waste': hint.innerText = "Reporting to: Solid Waste Dept"; break;
+            default: hint.style.display = "none";
+        }
+    }
+
     function getLocation() {
         const locationInput = document.getElementById('location-input');
+        const locImg = document.getElementById('loc-img');
+        const locText = document.getElementById('loc-text');
+
         if (navigator.geolocation) {
-            locationInput.placeholder = "Fetching location...";
+            locImg.classList.add('loading-spin');
+            locText.innerText = "Locating...";
+
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const lat = position.coords.latitude;
                     const lon = position.coords.longitude;
                     locationInput.value = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+                    locImg.classList.remove('loading-spin');
+                    locText.innerText = "Location Found";
                 },
                 (error) => {
-                    alert("Unable to retrieve your location. Please type it manually.");
-                    locationInput.placeholder = "Current GPS Address";
+                    alert("Unable to retrieve location. Please type manually.");
+                    locImg.classList.remove('loading-spin');
+                    locText.innerText = "Use My Location";
                 }
             );
-        } else {
-            alert("Geolocation is not supported by this browser.");
         }
     }
 
-    // Image Preview Logic
     const imgInp = document.getElementById('imgInp');
     const preview = document.getElementById('preview');
     const boxLabel = document.getElementById('box-label');
@@ -179,13 +220,6 @@
             changeBtn.style.display = 'inline';
         }
     }
-
-    // Char Counter Logic
-    const desc = document.getElementById('desc');
-    const count = document.getElementById('count');
-    desc.oninput = () => {
-        count.innerText = `${desc.value.length}/500`;
-    };
 </script>
 
 </body>

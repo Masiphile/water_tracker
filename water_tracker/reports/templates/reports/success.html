@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Report Submitted - Water Tracker</title>
+    <title>Report Submitted - OmniServe</title>
     <style>
         body {
-            background-color: #e0f2fe; /* Light Blue */
+            background-color: #e0f2fe; /* Kept your Light Blue */
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #334155;
             margin: 0;
@@ -28,7 +28,6 @@
             text-align: center;
         }
 
-        /* Updated styling for your tick.png */
         .success-icon {
             width: 80px;
             height: 80px;
@@ -46,6 +45,22 @@
             font-size: 1.1rem;
             margin-bottom: 25px;
         }
+
+        .notification-alert {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            text-align: left;
+        }
+
+        .alert-icon { font-size: 1.2rem; }
+        .alert-content { font-size: 0.85rem; color: #166534; line-height: 1.4; }
+        .alert-content b { color: #14532d; }
 
         .info-box {
             background-color: #f8fafc;
@@ -122,8 +137,18 @@
 <div class="success-card">
     <img src="{% static 'images/tick.png' %}" alt="Success" class="success-icon">
     
-    <h2>Report Submitted</h2>
-    <p class="submission-text">Submission Received!</p>
+    <h2>Report Logged</h2>
+    <p class="submission-text">Service Request Received!</p>
+
+    <div class="notification-alert">
+        <span class="alert-icon">
+            <img src="{% static 'images/phone.png' %}" alt="phone" style="width:24px; vertical-align:middle;">
+        </span>
+        <div class="alert-content">
+            <b>Confirmation Sent!</b><br>
+            A reference SMS has been sent to <b>0768118359</b>. You can use <b>#WLT-99281</b> to track progress at any municipal office.
+        </div>
+    </div>
 
     <div class="info-box">
         <div class="info-item">
@@ -131,15 +156,16 @@
         </div>
         <div class="info-item">
             <span class="label">Status:</span> 
-            <span class="status-pill">Pending Review 🟡</span>
+            <span class="status-pill">Sent to Department 🟡</span>
         </div>
     </div>
 
     <div class="next-steps">
         <h4>What's Next?</h4>
         <ol>
-            <li>Dispatching a technician to the location.</li>
-            <li>ETA: Within 4-6 hours.</li>
+            <li>The relevant municipal department has been notified.</li>
+            <li>A technician will be assigned based on report severity.</li>
+            <li>Check your SMS for the direct tracking link.</li>
         </ol>
     </div>
 
